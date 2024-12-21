@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+    <link rel="manifest" href="manifest.json">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>कृषि मीत (Krashi Meet)</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background: linear-gradient(to bottom, #2b1055, #0544ce); /* Purple to Navy Blue Gradient */
+            margin: 0;
+            padding: 0;
+            color: #ffffff;
+        }
+
+        .chat-container {
+            width: 100%;
+            max-width: 700px;
+            margin: 20px auto;
+            background: rgba(255, 255, 255, 0.1);
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.4);
+        }
+
+        .logo {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .logo img {
+            width: 300px;
+            border-radius: 50%;
+        }
+
+        .title {
+            text-align: center;
+            margin-bottom: 20px;
+            font-size: 28px;
+            font-weight: bold;
+            text-transform: uppercase;
+        }
+
+        .ai-chat-box {
+            margin-bottom: 20px;
+        }
+
+        .ai-chat-area {
+            font-size: 18px;
+            background: rgba(255, 255, 255, 0.2);
+            padding: 15px;
+            border-radius: 8px;
+            color: #fff;
+            text-align: center;
+        }
+
+        .prompt-area {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            justify-content: center;
+            margin-top: 20px;
+        }
+
+        .button {
+            background: linear-gradient(to right, #8e2de2, #4a00e0); /* Purple Gradient */
+            color: white;
+            padding: 15px;
+            border: none;
+            border-radius: 5px;
+            font-size: 16px;
+            cursor: pointer;
+            width: 100%;
+            max-width: 200px;
+            text-align: center;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+        }
+
+        .button:hover {
+            background: linear-gradient(to right, #4a00e0, #8e2de2);
+        }
+
+        .season-list {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .season-button {
+            background: linear-gradient(to right, #ff6a00, #d40d13); /* Orange-Red Gradient */
+            color: white;
+            padding: 12px;
+            border: none;
+            border-radius: 5px;
+            font-size: 14px;
+            cursor: pointer;
+            text-align: center;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+        }
+
+        .season-button:hover {
+            background: linear-gradient(to right, #ee0979, #ff6a00);
+        }
+
+        .footer {
+            text-align: center;
+            margin-top: 20px;
+            font-size: 14px;
+            color: rgba(255, 255, 255, 0.8);
+        }
+
+        body {
+            margin: 0;
+            padding: 0;
+            font-size: 16px;
+        }
+
+        /* Optimize buttons and text for smaller screens */
+        .button, .season-button {
+            width: 90%; /* Reduce button width for small screens */
+            max-width: none;
+        }
+
+        .chat-container {
+            padding: 15px; /* Reduce padding for smaller screens */
+        }
+
+        .season-list {
+            grid-template-columns: 1fr; /* One button per row on smaller screens */
+        }
+
+        @media (min-width: 768px) {
+            .season-list {
+                grid-template-columns: repeat(2, 1fr); /* Two buttons per row for larger screens */
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="chat-container">
+        <!-- Logo Placeholder -->
+        <div class="logo">
+            <img src="krashi.png" alt="Krashi Meet Logo">
+        </div>
+
+        <!-- Title -->
+        <div class="title">किसान का मित्र</div>
+
+        <!-- Chat Area -->
+        <div class="ai-chat-box">
+            <div class="ai-chat-area" id="chatBox">
+                नमस्कार! आपका स्वागत है "किसान का मित्र" में।
+            </div>
+        </div>
+
+        <!-- Seasonal Buttons -->
+        <div class="prompt-area">
+            <button class="button" id="weather">वर्तमान मौसम</button>
+            <button class="button" id="cropList">फसल सूची</button>
+            <button class="button" id="seasonList">हर मौसम की फसलें</button>
+        </div>
+
+        <!-- Hidden Seasonal Crop List -->
+        <div id="seasonListArea" style="display: none;">
+            <div class="season-list">
+                <button class="season-button" onclick="showSeasonInfo('summer')">ग्रीष्म ऋतु (गर्मी)</button>
+                <button class="season-button" onclick="showSeasonInfo('monsoon')">वर्षा ऋतु</button>
+                <button class="season-button" onclick="showSeasonInfo('autumn')">शरद ऋतु</button>
+                <button class="season-button" onclick="showSeasonInfo('winter')">शीत ऋतु</button>
+                <button class="season-button" onclick="showSeasonInfo('spring')">वसंत ऋतु</button>
+            </div>
+        </div>
+
+        <!-- Hidden Crop List -->
+        <div id="cropListArea" style="display: none;">
+            <div class="season-list">
+                <button class="season-button" onclick="showCropInfo('rice')">चावल</button>
+                <button class="season-button" onclick="showCropInfo('wheat')">गेंहू</button>
+                <button class="season-button" onclick="showCropInfo('sugarcane')">गन्ना</button>
+                <button class="season-button" onclick="showCropInfo('tomatoes')">टमाटर</button>
+                <button class="season-button" onclick="showCropInfo('millets')">बाजरा</button>
+                <button class="season-button" onclick="showCropInfo('cotton')">कपास</button>
+                <button class="season-button" onclick="showCropInfo('soybean')">सोयाबीन</button>
+                <button class="season-button" onclick="showCropInfo('groundnut')">मूंगफली</button>
+                <button class="season-button" onclick="showCropInfo('jowar')">ज्वार</button>
+                <button class="season-button" onclick="showCropInfo('barley')">जौ</button>
+                <button class="season-button" onclick="showCropInfo('tea')">चाय</button>
+                <button class="season-button" onclick="showCropInfo('coffee')">कॉफी</button>
+            </div>
+        </div>
+
+        <div class="footer">© 2024 कृषि मीत | Designed to Empower Farmers</div>
+    </div>
+
+    <script>
+        function speakAnswer(answer) {
+            const speech = new SpeechSynthesisUtterance(answer);
+            speech.lang = "hi-IN"; // Hindi language
+
+            // Check if speech synthesis is available
+            if ('speechSynthesis' in window) {
+                try {
+                    window.speechSynthesis.speak(speech);
+                } catch (error) {
+                    console.error("Error speaking text:", error);
+                }
+            } else {
+                console.log("Speech synthesis not supported in this browser.");
+            }
+        }
+
+        document.getElementById('weather').addEventListener('click', function () {
+            const weatherInfo = "वर्तमान मौसम धूपदार और तापमान 21°C है।";
+            speakAnswer(weatherInfo);
+            document.getElementById('chatBox').innerHTML = `AI: ${weatherInfo}`;
+        });
+
+        document.getElementById('cropList').addEventListener('click', function () {
+            document.getElementById('seasonListArea').style.display = 'none';
+            document.getElementById('cropListArea').style.display = 'block';
+            speakAnswer("यहां फसलों की सूची है। कृपया एक विकल्प चुनें।");
+        });
+
+        document.getElementById('seasonList').addEventListener('click', function () {
+            document.getElementById('cropListArea').style.display = 'none';
+            document.getElementById('seasonListArea').style.display = 'block';
+            speakAnswer("हर मौसम की फसलों की जानकारी के लिए, एक मौसम का चयन करें।");
+        });
+
+        function showSeasonInfo(season) {
+            let info = "";
+            switch (season) {
+                case 'summer':
+                    info = "ग्रीष्म ऋतु में मक्का, बाजरा और मूंगफली उगाना अच्छा होता है।";
+                    break;
+                case 'monsoon':
+                    info = "वर्षा ऋतु में चावल, गन्ना और कपास सबसे अच्छी फसलें हैं।";
+                    break;
+                case 'autumn':
+                    info = "शरद ऋतु में सरसों, ज्वार और बाजरा उगाना अच्छा है।";
+                    break;
+                case 'winter':
+                    info = "शीत ऋतु में गेहूं, चना और मटर बेहतरीन फसलें हैं।";
+                    break;
+                case 'spring':
+                    info = "वसंत ऋतु में टमाटर, आलू और फूलगोभी उगाना सबसे अच्छा है।";
+                    break;
+                default:
+                    info = "इस मौसम की जानकारी उपलब्ध नहीं है।";
+            }
+            speakAnswer(info);
+            document.getElementById('chatBox').innerHTML = `AI: ${info}`;
+        }
+
+        function showCropInfo(crop) {
+            const cropData = {
+                rice: "चावल को मानसून में उगाना सबसे अच्छा है। यह पानी से भरे खेतों में उगाया जाता है।",
+                wheat: "गेहूं सर्दियों में उगाया जाता है। यह ठंडे मौसम के लिए आदर्श है।",
+                sugarcane: "गन्ना गर्म और आर्द्र जलवायु में उगता है और इसे एक वर्ष तक बढ़ने की जरूरत होती है।",
+                tomatoes: "टमाटर को धूप और सिक्त मिट्टी की जरूरत होती है। इसे वसंत और गर्मियों में उगाएं।",
+                millets: "बाजरा गर्म और शुष्क जलवायु में उगाया जाता है। यह सूखा प्रतिरोधी फसल है।",
+                cotton: "कपास को गर्म जलवायु और अच्छी धूप की जरूरत होती है। इसे मानसून के बाद उगाया जाता है।",
+                soybean: "सोयाबीन को अच्छी तरह से सिक्त मिट्टी की जरूरत होती है और इसे खरीफ मौसम में उगाया जाता है।",
+                groundnut: "मूंगफली को रेतीली मिट्टी और गर्म मौसम में उगाना सबसे अच्छा है।",
+                jowar: "ज्वार को गर्म और शुष्क क्षेत्रों में उगाया जाता है। यह एक प्रमुख खरीफ फसल है।",
+                barley: "जौ ठंडी जलवायु में उगता है। इसे सर्दियों में उगाना सबसे अच्छा है।",
+                tea: "चाय को पहाड़ी क्षेत्रों में ठंडे और आर्द्र मौसम में उगाया जाता है।",
+                coffee: "कॉफी को उच्च ऊंचाई पर उगाया जाता है। इसे ठंडी और छायादार जलवायु की जरूरत होती है।"
+            };
+            const info = cropData[crop] || "इस फसल की जानकारी उपलब्ध नहीं है।";
+            speakAnswer(info);
+            document.getElementById('chatBox').innerHTML = `AI: ${info}`;
+        }
+
+        // List available voices
+        function listAvailableVoices() {
+            const voices = speechSynthesis.getVoices();
+            voices.forEach(voice => {
+                console.log(voice.name, voice.lang);
+            });
+        }
+
+        speechSynthesis.onvoiceschanged = listAvailableVoices;
+
+    </script>
+</body>
+</html>
