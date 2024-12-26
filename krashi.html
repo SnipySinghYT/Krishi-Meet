@@ -8,10 +8,10 @@
     <style>
         body {
             font-family: 'Arial', sans-serif;
-            background: linear-gradient(to bottom, #2b1055, #0544ce); /* Purple to Navy Blue Gradient */
+            background: linear-gradient(to bottom, #ef9309, #eeeff0, green); /* Purple to Navy Blue Gradient */
             margin: 0;
             padding: 0;
-            color: #ffffff;
+            color: #07075f;
         }
 
         .chat-container {
@@ -51,7 +51,7 @@
             background: rgba(255, 255, 255, 0.2);
             padding: 15px;
             border-radius: 8px;
-            color: #fff;
+            color: #1d065b;
             text-align: center;
         }
 
@@ -65,7 +65,7 @@
 
         .button {
             background: linear-gradient(to right, #8e2de2, #4a00e0); /* Purple Gradient */
-            color: white;
+            color: rgb(220, 223, 240);
             padding: 15px;
             border: none;
             border-radius: 5px;
@@ -89,8 +89,8 @@
         }
 
         .season-button {
-            background: linear-gradient(to right, #ff6a00, #d40d13); /* Orange-Red Gradient */
-            color: white;
+            background: linear-gradient(to right, #ff6a00, #ee0979); /* Orange-Red Gradient */
+            color: rgb(12, 28, 82);
             padding: 12px;
             border: none;
             border-radius: 5px;
@@ -110,32 +110,31 @@
             font-size: 14px;
             color: rgba(255, 255, 255, 0.8);
         }
-
         body {
-            margin: 0;
-            padding: 0;
-            font-size: 16px;
-        }
+        margin: 0;
+        padding: 0;
+        font-size: 16px;
+    }
 
-        /* Optimize buttons and text for smaller screens */
-        .button, .season-button {
-            width: 90%; /* Reduce button width for small screens */
-            max-width: none;
-        }
+    /* Optimize buttons and text for smaller screens */
+    .button, .season-button {
+        width: 90%; /* Reduce button width for small screens */
+        max-width: none;
+    }
 
-        .chat-container {
-            padding: 15px; /* Reduce padding for smaller screens */
-        }
+    .chat-container {
+        padding: 15px; /* Reduce padding for smaller screens */
+    }
 
+    .season-list {
+        grid-template-columns: 1fr; /* One button per row on smaller screens */
+    }
+
+    @media (min-width: 768px) {
         .season-list {
-            grid-template-columns: 1fr; /* One button per row on smaller screens */
+            grid-template-columns: repeat(2, 1fr); /* Two buttons per row for larger screens */
         }
-
-        @media (min-width: 768px) {
-            .season-list {
-                grid-template-columns: repeat(2, 1fr); /* Two buttons per row for larger screens */
-            }
-        }
+    }
     </style>
 </head>
 <body>
@@ -146,12 +145,15 @@
         </div>
 
         <!-- Title -->
-        <div class="title">किसान का मित्र</div>
+        <div class="title">कृषि मीत
+            
+        </div>
+        
 
         <!-- Chat Area -->
         <div class="ai-chat-box">
             <div class="ai-chat-area" id="chatBox">
-                नमस्कार! आपका स्वागत है "किसान का मित्र" में।
+                नमस्कार! आपका स्वागत है "कृषि मीत" में।
             </div>
         </div>
 
@@ -197,22 +199,12 @@
     <script>
         function speakAnswer(answer) {
             const speech = new SpeechSynthesisUtterance(answer);
-            speech.lang = "hi-IN"; // Hindi language
-
-            // Check if speech synthesis is available
-            if ('speechSynthesis' in window) {
-                try {
-                    window.speechSynthesis.speak(speech);
-                } catch (error) {
-                    console.error("Error speaking text:", error);
-                }
-            } else {
-                console.log("Speech synthesis not supported in this browser.");
-            }
+            speech.lang = "hi-IN";
+            window.speechSynthesis.speak(speech);
         }
 
         document.getElementById('weather').addEventListener('click', function () {
-            const weatherInfo = "वर्तमान मौसम धूपदार और तापमान 21°C है।";
+            const weatherInfo = "वर्तमान मौसम धूपदार और तापमान 28°C है।";
             speakAnswer(weatherInfo);
             document.getElementById('chatBox').innerHTML = `AI: ${weatherInfo}`;
         });
@@ -228,6 +220,7 @@
             document.getElementById('seasonListArea').style.display = 'block';
             speakAnswer("हर मौसम की फसलों की जानकारी के लिए, एक मौसम का चयन करें।");
         });
+        
 
         function showSeasonInfo(season) {
             let info = "";
@@ -272,18 +265,17 @@
             const info = cropData[crop] || "इस फसल की जानकारी उपलब्ध नहीं है।";
             speakAnswer(info);
             document.getElementById('chatBox').innerHTML = `AI: ${info}`;
+            
         }
-
-        // List available voices
-        function listAvailableVoices() {
-            const voices = speechSynthesis.getVoices();
-            voices.forEach(voice => {
-                console.log(voice.name, voice.lang);
-            });
-        }
-
-        speechSynthesis.onvoiceschanged = listAvailableVoices;
+        
+    if ('serviceWorker' in navigator) {
+        navigator.serviceWorker.register('sw.js')
+            .then(() => console.log('Service Worker registered.'));
+    }
 
     </script>
 </body>
 </html>
+
+
+
